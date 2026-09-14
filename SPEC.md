@@ -148,29 +148,19 @@ Premium corporate healthcare technology platform — clean, trustworthy, enterpr
 
 ### Stack
 - **Framework:** Next.js 16 (App Router)
-- **Database:** PostgreSQL via Drizzle ORM
-- **Authentication:** NextAuth.js with credentials provider
+- **Database:** Firebase Firestore
+- **Authentication:** Firebase Authentication with email/password
 - **Styling:** Tailwind CSS 4
 - **Animations:** Framer Motion
 - **Icons:** Lucide React
 
-### Database Schema
+### Firestore Collections
 
-```sql
--- Users table for admin authentication
-users (id, name, email, password, role, createdAt, updatedAt)
-
--- Services
-services (id, title, slug, category, description, features, icon, active, order, createdAt, updatedAt)
-
--- Testimonials
-testimonials (id, clientName, company, industry, testimonial, rating, imageUrl, active, featured, createdAt, updatedAt)
-
--- Inquiries
-inquiries (id, fullName, companyName, email, phone, serviceRequired, projectDetails, status, createdAt, updatedAt)
-
--- Site Settings
-site_settings (id, key, value)
+```
+services: title, slug, category, description, features, icon, active, order, createdAt, updatedAt
+testimonials: clientName, company, industry, testimonial, rating, imageUrl, active, featured, createdAt, updatedAt
+inquiries: fullName, companyName, email, phone, serviceRequired, projectDetails, status, createdAt, updatedAt
+siteSettings: key, value
 ```
 
 ### API Design
@@ -189,17 +179,19 @@ site_settings (id, key, value)
 - `GET/PATCH /api/admin/settings` - Site settings
 
 ### Authentication Strategy
-- NextAuth.js with credentials provider
-- Bcrypt password hashing
-- Session-based auth with JWT
+- Firebase Authentication with email/password
+- Firebase-managed authentication sessions
 - Admin role required for dashboard access
 - Protected routes via middleware
 
 ### Environment Variables
 ```
-DATABASE_URL=postgresql://...
-NEXTAUTH_SECRET=...
-NEXTAUTH_URL=...
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+NEXT_PUBLIC_FIREBASE_APP_ID=...
 ```
 
 ## 7. SEO Implementation
@@ -221,9 +213,8 @@ NEXTAUTH_URL=...
 ## 8. Security Considerations
 
 - All admin routes protected by authentication middleware
-- Password hashing with bcrypt
-- SQL injection prevention via Drizzle ORM
+- Firestore security rules and Firebase Authentication
 - XSS prevention via React's default escaping
-- CSRF protection via NextAuth.js
+- Firebase-managed authentication tokens
 - Environment variables for secrets
 - Input validation on all forms
