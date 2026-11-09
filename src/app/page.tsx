@@ -548,8 +548,8 @@ export default function HomePage() {
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-colors"
               >
-                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4">
-                  <item.icon className="w-6 h-6 text-[#00AEEF]" />
+                <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-4">
+                  <item.icon className="w-6 h-6 text-[#0F2D5C]" />
                 </div>
                 <h3 className="text-white font-semibold mb-2">{item.title}</h3>
                 <p className="text-white/70 text-sm">{item.description}</p>
