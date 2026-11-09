@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addDoc, collection, getDocs, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 
 const services = [
@@ -121,26 +121,6 @@ export async function POST(request: NextRequest) {
     console.error("Error submitting inquiry:", error);
     return NextResponse.json(
       { error: "Failed to submit inquiry. Please try again." },
-      { status: 500 }
-    );
-  }
-}
-
-export async function GET() {
-  try {
-    const snapshot = await getDocs(
-      query(collection(firestore, "inquiries"), orderBy("createdAt", "desc"))
-    );
-    const allInquiries = snapshot.docs.map((document) => ({
-      id: document.id,
-      ...document.data(),
-    }));
-
-    return NextResponse.json({ data: allInquiries });
-  } catch (error) {
-    console.error("Error fetching inquiries:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch inquiries" },
       { status: 500 }
     );
   }

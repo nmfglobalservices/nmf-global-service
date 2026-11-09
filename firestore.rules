@@ -1,7 +1,6 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Merge this match into the existing ruleset; preserve rules for other collections.
     match /inquiries/{inquiryId} {
       function validInquiry() {
         let data = request.resource.data;
@@ -56,6 +55,7 @@ service cloud.firestore {
           && data.updatedAt == request.time;
       }
 
+      allow read: if request.auth != null;
       allow create: if validInquiry();
     }
   }
