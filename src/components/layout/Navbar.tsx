@@ -3,25 +3,31 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone } from "lucide-react";
+import {
+  BarChart3,
+  Briefcase,
+  Building2,
+  Home,
+  Info,
+  Mail,
+  Phone,
+} from "lucide-react";
 import Image from "next/image";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/services", label: "Services" },
-  { href: "/industries", label: "Industries" },
-  { href: "/power-bi", label: "Power BI" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/about", label: "About", icon: Info },
+  { href: "/services", label: "Services", icon: Briefcase },
+  { href: "/industries", label: "Industries", icon: Building2 },
+  { href: "/power-bi", label: "Power BI", icon: BarChart3 },
+  { href: "/contact", label: "Contact", icon: Mail },
 ];
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
   const handleNavClick = () => {
-    setIsOpen(false);
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -38,13 +44,13 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    setIsOpen(false);
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
     }
   }, [pathname]);
 
   return (
+    <>
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
@@ -108,56 +114,40 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden rounded-xl p-2 text-[#0F2D5C] transition-colors hover:bg-[#F5F9FF]"
-            aria-label="Toggle menu"
+          <a
+            href="tel:+917339245833"
+            className="lg:hidden rounded-xl p-2 text-[#0F2D5C]"
+            aria-label="Call NMF Global Services"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            <Phone className="h-5 w-5" />
+          </a>
         </div>
       </nav>
-
-      {/* Mobile Menu */}
-      <div
-        className={`lg:hidden fixed inset-0 top-16 sm:top-20 bg-white/95 backdrop-blur-xl transition-all duration-300 ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-      >
-        <div className="container py-6">
-          <div className="flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                prefetch={true}
-                scroll={false}
-                onClick={handleNavClick}
-                className={`py-3 px-4 rounded-lg font-medium transition-colors ${
-                  pathname === link.href
-                    ? "bg-[#00AEEF]/10 text-[#00AEEF]"
-                    : "text-[#0F2D5C] hover:bg-[#F5F9FF]"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-4 border-t border-gray-100">
-              <a
-                href="tel:+917339245833"
-                className="flex items-center gap-2 py-3 px-4 text-[#0F2D5C] font-medium"
-              >
-                <Phone className="w-5 h-5" />
-                +91 7339245833
-              </a>
-              <Link href="/contact" className="btn btn-primary w-full mt-2">
-                Get a Quote
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
     </header>
+    <nav
+      aria-label="Mobile navigation"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white shadow-[0_-4px_16px_rgba(15,45,92,0.08)] lg:hidden"
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+    >
+      <div className="flex h-16 items-stretch">
+        {navLinks.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            prefetch
+            scroll={false}
+            onClick={handleNavClick}
+            aria-current={pathname === href ? "page" : undefined}
+            className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-1 px-0.5 text-[10px] font-medium transition-colors ${
+              pathname === href ? "text-[#00AEEF]" : "text-[#0F2D5C]"
+            }`}
+          >
+            <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+            <span className="truncate">{label}</span>
+          </Link>
+        ))}
+      </div>
+    </nav>
+    </>
   );
 }

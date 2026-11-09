@@ -93,7 +93,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col">
         <Providers>
           <Navbar />
-          <main className="flex-grow pt-20">{children}</main>
+          <main className="flex-grow pt-20 pb-16 lg:pb-0">{children}</main>
           <Footer />
           <WhatsAppButton />
         </Providers>
