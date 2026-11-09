@@ -41,8 +41,9 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Location",
-    value: "NMF Global Services",
-    href: "#",
+    value:
+      "No. 16/39 Puransamedu 2nd Street,\nHakeem Nagar, Rasathupuram,\nMelvisharam - 632509",
+    href: "https://maps.app.goo.gl/g1xULUeANEczAUpb7",
   },
 ];
 
@@ -88,7 +89,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="font-medium text-[#0F2D5C]">{item.title}</p>
-                      <p className="text-[#6B7280]">{item.value}</p>
+                      <p className="whitespace-pre-line text-[#6B7280]">{item.value}</p>
                     </div>
                   </a>
                 ))}

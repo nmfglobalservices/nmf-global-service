@@ -118,6 +118,10 @@ export default function TermsPage() {
               <p className="text-[#0F2D5C] font-medium">NMF Global Services</p>
               <p className="text-[#6B7280]">Email: info@nmfglobalservices.com</p>
               <p className="text-[#6B7280]">Phone: +91 7339245833</p>
+              <p className="text-[#6B7280]">
+                Address: No. 16/39 Puransamedu 2nd Street, Hakeem Nagar,
+                Rasathupuram, Melvisharam - 632509
+              </p>
               <p className="text-[#6B7280]">Website: www.nmfglobalservices.com</p>
             </div>
           </div>

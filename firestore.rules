@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Merge this match into the existing ruleset; preserve rules for other collections.
+    match /inquiries/{inquiryId} {
+      function validInquiry() {
+        let data = request.resource.data;
+        return data.keys().hasOnly([
+            "fullName",
+            "companyName",
+            "email",
+            "phone",
+            "serviceRequired",
+            "projectDetails",
+            "status",
+            "createdAt",
+            "updatedAt"
+          ])
+          && data.keys().hasAll([
+            "fullName",
+            "companyName",
+            "email",
+            "phone",
+            "serviceRequired",
+            "projectDetails",
+            "status",
+            "createdAt",
+            "updatedAt"
+          ])
+          && data.fullName is string
+          && data.fullName.size() > 0
+          && data.fullName.size() <= 200
+          && (data.companyName == null
+            || (data.companyName is string && data.companyName.size() <= 200))
+          && data.email is string
+          && data.email.size() <= 254
+          && data.email.matches('^[^@ ]+@[^@ ]+[.][^@ ]+$')
+          && (data.phone == null
+            || (data.phone is string && data.phone.size() <= 50))
+          && data.serviceRequired in [
+            "Medical Transcription",
+            "Medical Billing Support",
+            "Healthcare Data Entry",
+            "Healthcare Data Management",
+            "Power BI & Data Analytics",
+            "Website Development",
+            "Software Development",
+            "IT Support",
+            "Back-Office Support",
+            "Other"
+          ]
+          && (data.projectDetails == null
+            || (data.projectDetails is string && data.projectDetails.size() <= 5000))
+          && data.status == "new"
+          && data.createdAt == request.time
+          && data.updatedAt == request.time;
+      }
+
+      allow create: if validInquiry();
+    }
+  }
+}

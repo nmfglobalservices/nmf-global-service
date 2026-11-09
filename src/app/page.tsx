@@ -363,7 +363,7 @@ export default function HomePage() {
                   <Link
                   href="/contact"
                   className="btn btn-white hero-cta w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3.5 sm:py-4"
-                  >Get Free Consultation</Link>
+                  >Get in Touch</Link>
                 </motion.div>
                 <motion.div className="w-full sm:w-auto" variants={heroFadeUp} whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }}>
                   <Link

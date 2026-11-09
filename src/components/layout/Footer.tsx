@@ -132,6 +132,16 @@ export default function Footer() {
                   </div>
                   <div className="min-w-0 text-[0.98rem] leading-6 text-slate-200">
                     <p className="font-medium text-white">NMF Global Services</p>
+                    <a
+                      href="https://maps.app.goo.gl/g1xULUeANEczAUpb7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="whitespace-pre-line transition-colors duration-300 hover:text-[#7EE0FF]"
+                    >
+                      No. 16/39 Puransamedu 2nd Street,
+                      {"\n"}Hakeem Nagar, Rasathupuram,
+                      {"\n"}Melvisharam - 632509
+                    </a>
                   </div>
                 </li>
 
