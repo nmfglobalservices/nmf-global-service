@@ -170,9 +170,9 @@ siteSettings: key, value
 - `GET /api/services` - List active services
 - `GET /api/testimonials` - List active testimonials
 
-The Firestore rules in `firestore.rules` allow validated inquiry creation only. Merge
-the `/inquiries/{inquiryId}` match into the existing Firestore ruleset and preserve
-rules for other collections; do not replace the existing rules with this file.
+The Firestore rules in `firestore.rules` allow validated inquiry creation,
+authenticated inquiry reads, and public reads for services and testimonials used
+by the website. Preserve rules for other collections when deploying this ruleset.
 
 **Admin Routes (protected):**
 - `GET /api/admin/inquiries` - List all inquiries

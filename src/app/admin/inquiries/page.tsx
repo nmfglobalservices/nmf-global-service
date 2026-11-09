@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Filter, Eye, Trash2, ChevronDown } from "lucide-react";
+import { collection, getDocs, orderBy, query, Timestamp } from "firebase/firestore";
+import { firestore } from "@/lib/firebase";
 
 interface Inquiry {
   id: string;
@@ -27,8 +29,8 @@ const statusOptions = [
 
 export default function AdminInquiriesPage() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-  const [filteredInquiries, setFilteredInquiries] = useState<Inquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
@@ -37,12 +39,44 @@ export default function AdminInquiriesPage() {
   useEffect(() => {
     const loadInquiries = async () => {
       try {
-        const response = await fetch("/api/inquiries");
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || "Failed to fetch inquiries");
-        setInquiries(result.data);
+        const snapshot = await getDocs(
+          query(collection(firestore, "inquiries"), orderBy("createdAt", "desc"))
+        );
+        setInquiries(
+          snapshot.docs.map((document) => {
+            const data = document.data();
+            const createdAt =
+              data.createdAt instanceof Timestamp
+                ? data.createdAt.toDate().toISOString()
+                : typeof data.createdAt === "string"
+                  ? data.createdAt
+                  : "";
+            const updatedAt =
+              data.updatedAt instanceof Timestamp
+                ? data.updatedAt.toDate().toISOString()
+                : typeof data.updatedAt === "string"
+                  ? data.updatedAt
+                  : "";
+
+            return {
+              id: document.id,
+              fullName: data.fullName ?? "",
+              companyName: data.companyName ?? null,
+              email: data.email ?? "",
+              phone: data.phone ?? null,
+              serviceRequired: data.serviceRequired ?? "",
+              projectDetails: data.projectDetails ?? null,
+              status: data.status ?? "new",
+              createdAt,
+              updatedAt,
+            };
+          })
+        );
       } catch (error) {
         console.error("Error loading inquiries:", error);
+        setLoadError(
+          "Unable to load inquiries. Check that the updated Firestore rules are published, then try again."
+        );
       } finally {
         setIsLoading(false);
       }
@@ -51,7 +85,7 @@ export default function AdminInquiriesPage() {
     void loadInquiries();
   }, []);
 
-  useEffect(() => {
+  const filteredInquiries = useMemo(() => {
     let result = inquiries;
 
     // Apply status filter
@@ -71,7 +105,7 @@ export default function AdminInquiriesPage() {
       );
     }
 
-    setFilteredInquiries(result);
+    return result;
   }, [inquiries, searchQuery, statusFilter]);
 
   const getStatusBadge = (status: string) => {
@@ -136,6 +170,12 @@ export default function AdminInquiriesPage() {
           <p className="text-[#6B7280]">{filteredInquiries.length} total inquiries</p>
         </div>
       </div>
+
+      {loadError && (
+        <div role="alert" className="mb-6 rounded-lg bg-red-50 p-4 text-red-700">
+          {loadError}
+        </div>
+      )}
 
       {/* Filters */}
       <div className="bg-white rounded-xl p-4 shadow-sm mb-6">
@@ -278,7 +318,7 @@ export default function AdminInquiriesPage() {
           ))}
         </div>
 
-        {filteredInquiries.length === 0 && (
+        {!loadError && filteredInquiries.length === 0 && (
           <div className="p-12 text-center">
             <p className="text-[#6B7280]">No inquiries found</p>
           </div>

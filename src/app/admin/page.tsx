@@ -44,6 +44,7 @@ export default function AdminDashboard() {
   });
   const [recentInquiries, setRecentInquiries] = useState<RecentInquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -76,6 +77,9 @@ export default function AdminDashboard() {
         setRecentInquiries(inquiryData);
       } catch (error) {
         console.error("Error loading dashboard:", error);
+        setLoadError(
+          "Unable to load dashboard data. Publish the latest Firestore rules and make sure you are signed in."
+        );
       } finally {
         setIsLoading(false);
       }
@@ -149,8 +153,14 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-[#0F2D5C]">Dashboard</h1>
-        <p className="text-[#6B7280]">Welcome back! Here's an overview of your inquiries.</p>
+        <p className="text-[#6B7280]">Welcome back! Here&apos;s an overview of your inquiries.</p>
       </div>
+
+      {loadError && (
+        <div role="alert" className="mb-6 rounded-lg bg-red-50 p-4 text-red-700">
+          {loadError}
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
